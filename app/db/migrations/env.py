@@ -1,14 +1,10 @@
-import os
-
 from logging.config import fileConfig
 
 
 from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 
 from alembic import context
 
-from app.models.document import Document
 from app.models import metadata
 from config import system_config
 

@@ -1,9 +1,9 @@
 # Summarization Text Api
 
 # Setup
-1. docker-compose up
-2. alembic upgrade head
-3. python main.py
+
+docker-compose up --build
+
 
 # Example
 You can change count output sentences. Change the variable max_sentences in the .env file max_sentences 

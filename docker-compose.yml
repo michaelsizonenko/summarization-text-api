@@ -8,7 +8,24 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: summarization
+
     volumes:
-      - /private/var/lib/postgres/data
+      - postgres_data:/private/var/lib/postgres/data
     ports:
       - 5432:5432
+  web:
+    build: .
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/summarization
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    restart: always
+
+
+volumes:
+  postgres_data:
+

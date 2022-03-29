@@ -19,14 +19,13 @@ class SummaryTextService:
 
     def __init__(self, doc_repo: DocumentRepository):
         self.doc_repo = doc_repo
-        self.max_sentences = system_config.max_sentences
 
     async def create_document(self, text: str) -> DocumentBase:
-        summary = self.generate_summary(text=text)
+        summary = self.generate_summary(text=text, max_sentences=system_config.max_sentences)
         document = await self.doc_repo.add(summary=summary)
         return document
 
-    def generate_summary(self, text) -> str:
+    def generate_summary(self, text: str, max_sentences: int) -> str:
         stop_words = stopwords.words('english')
 
         # Step 1 - Read text anc split it
@@ -43,7 +42,7 @@ class SummaryTextService:
         ranked_sentence = sorted(((scores[i], s) for i, s in enumerate(sentences)), reverse=True)
         logger.info(f"Indexes of top ranked_sentence order are: {ranked_sentence}")
 
-        summarize_text = [" ".join(ranked_sentence[i][1]) for i in range(self.max_sentences)]
+        summarize_text = [" ".join(ranked_sentence[i][1]) for i in range(max_sentences)]
 
         # Step 5 - Ofcourse, output the summarization text
         return ". ".join(summarize_text)
